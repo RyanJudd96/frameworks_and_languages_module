@@ -58,7 +58,9 @@ app.post('/item', (req, res) => {
   if(Object.keys(req.body).toString() !="user_id,keywords,description,lat,lon")
   {
     //checks entered data is correct and returns error code and message in case of failure
-    return res.status(405).json({"message": "missing fields"})
+    res.status(405).json({"message": "missing fields"})
+    console.log("Error 404: Missing Fields")
+    return;
   }
   else
   {
@@ -73,13 +75,14 @@ app.post('/item', (req, res) => {
 
     items.push(req.body)
     res.status(201).json()
-    console.log("Successful POST Request")
+    console.log("Successful POST Request");
   }
 })
 
 app.get('/items', (req, res) => {
   res.json(items)
-  es.status(200).json("Message: ", "Successful GET requests")
+  res.status(200).json("Message: ", "Successful GET requests")
+  return;
 })
 
 app.get('/item/:id', (req, res) => {
@@ -92,16 +95,35 @@ app.get('/item/:id', (req, res) => {
   {
     console.log("Error 404");
     res.status(404).json('Search Failed');
+    return;
   }
-
+  else
+  {
   console.log("User ID found!" + searchedItem);
   res.status(200).json(searchedItem);
-  return;  
+  return;
+  }  
 })
 
-//app.delete('/user', (req, res) => {
- // res.send('Got a DELETE request at /user')
-//})
+app.delete('/item/:id', (req, res) => {
+
+  const id = parseFloat(req.params.id);
+
+  const itemToDelete = items.find(itemToDelete => itemToDelete.id === id);
+
+  if(!itemToDelete)
+  {
+    console.log("Error 404");
+    res.status(404).json('Item Not Found');
+    return;
+  }
+  else
+  {
+    const x = items.splice(id, 1);
+    console.log("User ID found! Item Deleted");
+    res.status(204).json("Item Deleted");  
+  }
+})
 
 //#endregion
 
