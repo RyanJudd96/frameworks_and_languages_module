@@ -1,9 +1,10 @@
 const express = require('express')
 const app = express()
+const cors = require('cors')
 const port = 8000
 
 app.use(express.json());
-
+app.use(cors())
 
 //#region Dummy Data
 let items =
@@ -74,8 +75,8 @@ app.post('/item', (req, res) => {
     req.body['id'] = identifier;
 
     items.push(req.body)
-    res.status(201).json()
-    console.log("Successful POST Request");
+    return res.status(201).json(req.body)
+    //console.log("Successful POST Request");
   }
 })
 
@@ -99,9 +100,9 @@ app.get('/item/:id', (req, res) => {
   }
   else
   {
-  console.log("User ID found!" + searchedItem);
-  res.status(200).json(searchedItem);
-  return;
+    //console.log("User ID found!" + searchedItem);
+    return res.status(200).json(searchedItem);
+    
   }  
 })
 
