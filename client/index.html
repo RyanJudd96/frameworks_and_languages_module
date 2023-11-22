@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client View</title>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+        }
+      }
+    </script>
+</head>
+<body>
+      <h1>HTML Boilerplate</h1>
+      <div id="app">
+        {{ message }}
+      
+      <form>
+        <input name="user_id" placeholder="Please Enter your User ID:"/>
+        <input name="keywords" placeholder="Please Enter Keywords:"/>
+        <input name="description" placeholder="Please Enter a Description:"/>
+        <input name="image" placeholder="Please Enter an Image URL Here:"/>
+        <input name="lat" placeholder="Please Enter Location Latitude Here:"/>
+        <input name="lon" placeholder="Please Enter Location Longitude Here:"/>
+        <button>Post</button>
+      </form>
+            
+      </div>
+      
+      <script type="module">
+        import { createApp, ref } from 'vue'
+      
+        createApp({
+          setup() {
+            const message = ref('Hello Vue!')
+            return {
+              message
+            }
+          }
+        }).mount('#app')
+      </script>
+
+      
+</body>
+</html>

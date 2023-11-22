@@ -1,7 +1,7 @@
 Technical Report
 ================
 
-(intro describing purpose of report - 200ish words)
+
 
 
 Critique of Server/Client prototype
@@ -29,6 +29,43 @@ Server Framework Features
 -------------------------
 
 ### (name of Feature 1)
+
+```javascript
+let items =
+[
+  {
+    "id": 0,
+    "user_id": "user1234",
+    "keywords": [
+      "hammer",
+      "nails",
+      "tools"
+    ],
+    "description": "A hammer and nails set",
+    "image": "https://placekitten.com/200/300",
+    "lat": 51.2798438,
+    "lon": 1.0830275,
+    "date_from": "2023-10-23T13:12:39.844Z",
+    "date_to": "2023-10-23T13:12:39.844Z"
+  },
+  {
+    "id": 1,
+    "user_id": "user3000",
+    "keywords": [
+      "hammer",
+      "nails",
+      "tools"
+    ],
+    "description": "A hammer and nails set",
+    "image": "https://placekitten.com/200/300",
+    "lat": 51.2798438,
+    "lon": 1.0830275,
+    "date_from": "2023-10-23T13:12:39.844Z",
+    "date_to": "2023-10-23T13:12:39.844Z"
+  }
+]
+```
+
 
 (Technical description of the feature - 40ish words)
 (A code block snippet example demonstrating the feature)
