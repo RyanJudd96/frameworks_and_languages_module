@@ -18,28 +18,91 @@
       <div id="app">
         {{ message }}
       
-      <form>
-        <input name="user_id" placeholder="Please Enter your User ID:"/>
-        <input name="keywords" placeholder="Please Enter Keywords:"/>
-        <input name="description" placeholder="Please Enter a Description:"/>
-        <input name="image" placeholder="Please Enter an Image URL Here:"/>
-        <input name="lat" placeholder="Please Enter Location Latitude Here:"/>
-        <input name="lon" placeholder="Please Enter Location Longitude Here:"/>
+        <!-- @submit prevents reloading of page upon form button press and run postData method instead-->
+
+      <form @submit.prevent = "postData">
+        <input v-model="item.user_id" name="user_id" placeholder="Please Enter your User ID:"/>
+        <input v-model="item.keywords" name="keywords" placeholder="Please Enter Keywords:"/>
+        <input v-model="item.description" name="description" placeholder="Please Enter a Description:"/>
+        <input v-model="item.image" name="image" placeholder="Please Enter an Image URL Here:"/>
+        <input v-model="item.lat" name="lat" placeholder="Please Enter Location Latitude Here:"/>
+        <input v-model="item.lon" name="lon" placeholder="Please Enter Location Longitude Here:"/>
         <button>Post</button>
       </form>
-            
+      
       </div>
       
       <script type="module">
         import { createApp, ref } from 'vue'
       
         createApp({
-          setup() {
-            const message = ref('Hello Vue!')
-            return {
-              message
+          data(){return {
+              message: 'Hello Vue!',
+              item: {
+                  user_id: '',
+                  keywords: '',
+                  description: '',
+                  image: '',
+                  lat: '',
+                  lon: '',
+              }
             }
-          }
+          },
+
+          created() 
+          {
+              this.clearForm()
+             //this.getItems()
+          },
+
+          methods: {
+
+            clearForm()
+            {
+              console.log("Cleared Form")
+              this.item.user_id = ''
+              this.item.keywords= ''
+              this.item.description= ''
+              this.item.image= ''
+              this.item.lat= ''
+              this.item.lon= ''
+            },
+
+            postData(data) {
+
+              console.log(this.item)
+
+              fetch(`/item`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(this.item),
+              
+              })
+                .then(response => response.json())
+                .then(json => console.log('Item Posted', json))
+                .then(() => this.clearForm())
+                .then(() => this.getItems())
+                .catch(err => console.error(err))
+                alert('Item Posted!');
+            },
+            
+            /*
+            getItems() {
+              fetch(`${urlAPI}/items`, 
+              {
+              method: 'GET',
+              })
+
+              .then(response => response.json())
+              .then(json => 
+              {
+              console.log("getItems", json)
+              this.list items = json  // save the json we got back into the variable `items`
+              })
+              .catch(err => console.error(err))
+            }
+            */
+          },
         }).mount('#app')
       </script>
 
