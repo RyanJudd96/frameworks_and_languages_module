@@ -73,7 +73,7 @@ app.get('/', (req, res) => {
 
 app.post('/item', (req, res) => {
 
-  if(Object.keys(req.body).toString() !="user_id,keywords,description,lat,lon")
+  if(!req.body.user_id || !req.body.keywords || !req.body.description || !req.body.lat || !req.body.lon)
   {
     //checks entered data is correct and returns error code and message in case of failure
     res.status(405).json({"message": "missing fields"})
@@ -83,17 +83,29 @@ app.post('/item', (req, res) => {
   else
   {
     //generates current date and random id number
-    const currentDate = new Date().toISOString();
+    const dateFrom = new Date().toISOString();
+    const dateTo = new Date().toISOString();
     const identifier = Math.random();
-
-    //creates a new field
-    req.body.id= identifier;
-    req.body['date_from'] = currentDate;
+    req.body['date_from'] = dateFrom;
+    req.body['date_to'] = dateTo;
     req.body['id'] = identifier;
 
-    items.push(req.body)
-    return res.status(201).json(req.body)
-    //console.log("Successful POST Request");
+    const elementField = {
+      "id": identifier,
+      "user_id": req.body.user_id,
+      "keywords": req.body.keywords,
+      "description": req.body.description,
+      "image": req.body.image,
+      "lat": req.body.lat,
+      "lon": req.body.lon,
+      "date_from": dateFrom,
+      "date_to": dateTo,
+    };
+
+    items.push(elementField)
+    console.log("Successful POST Request");
+    return res.status(201).json(elementField)
+    
   }
 })
 

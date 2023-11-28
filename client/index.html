@@ -30,11 +30,20 @@
         <button>Post</button>
       </form>
       
+      <ul>
+          <li v-for="item of list"> {{item}}
+
+          </li>
+      </ul>
+
       </div>
       
       <script type="module">
         import { createApp, ref } from 'vue'
-      
+        
+        const urlParams = new URLSearchParams(window.location.search);
+	      const urlAPI = (urlParams.get('api') || DEFAULT_API).replace(/\/$/, '');
+
         createApp({
           data(){return {
               message: 'Hello Vue!',
@@ -45,14 +54,15 @@
                   image: '',
                   lat: '',
                   lon: '',
-              }
+                },
+              list: [1,2,3],
             }
           },
 
           created() 
           {
               this.clearForm()
-             //this.getItems()
+              this.getItems()
           },
 
           methods: {
@@ -72,7 +82,7 @@
 
               console.log(this.item)
 
-              fetch(`/item`, {
+              fetch(`${urlAPI}/item`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(this.item),
@@ -80,13 +90,11 @@
               })
                 .then(response => response.json())
                 .then(json => console.log('Item Posted', json))
-                .then(() => this.clearForm())
                 .then(() => this.getItems())
                 .catch(err => console.error(err))
-                alert('Item Posted!');
+                .then(() => this.clearForm());
             },
             
-            /*
             getItems() {
               fetch(`${urlAPI}/items`, 
               {
@@ -96,12 +104,13 @@
               .then(response => response.json())
               .then(json => 
               {
-              console.log("getItems", json)
-              this.list items = json  // save the json we got back into the variable `items`
+              console.log("GET Request successful!", json)
+              this.list = json  // save the json we got back into the variable `items`
               })
               .catch(err => console.error(err))
             }
-            */
+
+
           },
         }).mount('#app')
       </script>
