@@ -6,8 +6,6 @@ const port = 8000
 app.use(express.json());
 app.use(cors())
 
-//#region Dummy Data
-
 let items =
 [
   {
@@ -41,23 +39,6 @@ let items =
     "date_to": "2023-10-23T13:12:39.844Z"
   }
 ]
-
-/*
-var items = {
-  1:{
-    "id": 0,
-    "user_id": "user1234",
-    "keywords": ["hammer","nails","tools"],
-    "description": "A hammer and nails set",
-    "image": "https://placekitten.com/200/300",
-    "lat": 51.2798438,
-    "lon": 1.0830275,
-    "date_from": "2023-10-23T13:12:39.844Z",
-    "date_to": "2023-10-23T13:12:39.844Z"
-  }
-};
-*/
-//#endregion
 
 //#region REQUESTS
 
@@ -136,9 +117,8 @@ app.get('/item/:id', (req, res) => {
 })
 
 app.delete('/item/:id', (req, res) => {
-
+  
   const id = parseFloat(req.params.id);
-
   const itemToDelete = items.find(itemToDelete => itemToDelete.id === id);
 
   if(!itemToDelete)
@@ -151,10 +131,10 @@ app.delete('/item/:id', (req, res) => {
   {
     const x = items.splice(id, 1);
     console.log("User ID found! Item Deleted");
-    res.status(204).json("Item Deleted");  
+    res.status(204).json("Item Deleted");
+    return;
   }
+  
 })
-
-//#endregion
 
 process.on('SIGINT', function() {process.exit()})
