@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client View</title>
+    <title>FreeCycle</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
 
     <script type="importmap">
       {
@@ -12,36 +14,130 @@
         }
       }
     </script>
+
 </head>
 <body>
-      <h1>HTML Boilerplate</h1>
+      <h1>FreeCycle</h1>
       <div id="app">
-        {{ message }}
-      
-        <!-- @submit prevents reloading of page upon form button press and run postData method instead-->
+        <div class = "mx-6">
 
-      <form @submit.prevent = "postData">
-        <input v-model="item.user_id" name="user_id" placeholder="Please Enter your User ID:"/>
-        <input v-model="item.keywords" name="keywords" placeholder="Please Enter Keywords:"/>
-        <input v-model="item.description" name="description" placeholder="Please Enter a Description:"/>
-        <input v-model="item.image" name="image" placeholder="Please Enter an Image URL Here:"/>
-        <input v-model="item.lat" name="lat" placeholder="Please Enter Location Latitude Here:"/>
-        <input v-model="item.lon" name="lon" placeholder="Please Enter Location Longitude Here:"/>
-        <button>Post</button>
-      </form>
+          <nav class="navbar">
+            <div class="container">
+              <div class="navbar-brand">
+              </div>
+              <div id="navbarMenu" class="navbar-menu">
+                <div class="navbar">
+                  <a class="navbar-item is-active">
+                    Home
+                  </a>
+                  <a class="navbar-item">
+                    Features
+                  </a>
+                  <a class="navbar-item">
+                    Help
+                  </a>
+                </div>
+              </div>
+            </div>
+          </nav>
       
-      <ul>
-          <li v-for="item of list"> {{item}}
-            <span data-field="id">{{item.id}}</span>
-            <span data-field="user_id">{{item.user_id}}</span>
-            <span data-field="keywords">{{item.keywords}}</span>
-            <span data-field="description">{{item.description}}</span>
-            <img :src="item.image">
-            <span data-field="lat">{{item.lat}}</span>
-            <span data-field="lon">{{item.lon}}</span>
-            <button data-action = "delete" @click="deleteItem(item.id)">Delete</button>
-          </li>
-      </ul>
+
+
+        <!-- @submit prevents reloading of page upon form button press and run postData method instead -->
+        <form @submit.prevent = "postData">
+          <!-- All the data input boxes and submit buttons are displayed here -->
+          <div class="field">
+            <div class="control">
+              <input class="input is-rounded is-link" v-model="item.user_id" name="user_id" placeholder="Please Enter your User ID:"/>
+            </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              <input class="input is-rounded is-link" v-model="item.keywords" name="keywords" placeholder="Please Enter Keywords:"/>
+            </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              <input class="input is-rounded is-link" v-model="item.image" name="image" placeholder="Please Enter an Image URL Here:"/>
+            </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              <input class="input is-rounded is-link" v-model="item.lat" name="lat" placeholder="Please Enter Location Latitude Here:"/>
+            </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              <input class="input is-rounded is-link" v-model="item.lon" name="lon" placeholder="Please Enter Location Longitude Here:"/>
+            </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              <textarea class="textarea is-rounded is-link" v-model="item.description" placeholder="Please Enter a Description:" rows="10"></textarea>
+            </div>
+          </div>
+          <button class = "button is-success is-outlined is-large">Post</button>
+        </form>
+        
+        <!-- This a container that uses a v-for to return all the currently stored data and images 
+        displayed on their own individual cards -->
+
+        <div class="container">
+          <div class="section">
+            <div class="columns">
+            </div>
+            <div id="app" class="row columns is-multiline">
+              <div v-for="item of list" key="card.id" class="column is-4">
+                <div class="card large">
+                  <div class="card-image">
+                    <figure class="image is-square">
+                      <img :src="item.image" alt="Image">
+                    </figure>
+                  </div>
+                  <div class="card-content">
+                    <div class="media">
+                      <div class="media-left">
+                      </div>
+                      <div class="media-content">
+                        <p class="title is-4 no-padding">
+                          {{"User ID: "}}{{item.user_id}}
+                        </p>
+                          <p class="title is-6">
+                            {{"Keywords: "}}
+                          </p> 
+                          <p class = "subtitle is-6">
+                            {{item.keywords}}
+                          </p>
+                          <p class="title is-6">
+                            {{"Latitude: "}}
+                          </p>
+                          <p class = "subtitle is-6">
+                            {{item.lat}}
+                          </p>
+                          <p class="title is-6">
+                          {{"Longitude: "}}
+                          </p>
+                          <p class = "subtitle is-6">
+                            {{item.lon}}
+                          </p>
+                      </div>
+                    </div>
+                    <div class="content">
+                      <p class = "title is-6">
+                        {{"Description: "}}
+                      </p>
+                      <p>
+                        {{item.description}}
+                      </p>
+                    </div>
+                    <button class = "button is-danger is-small is-rounded" data-action = "delete" @click="deleteItem(item.id)">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       </div>
       
@@ -53,7 +149,6 @@
 
         createApp({
           data(){return {
-              message: 'Hello Vue!',
               item: {
                   user_id: '',
                   keywords: '',
@@ -65,9 +160,11 @@
               list: [1,2,3],
             }
           },
-
+          
           created() 
           {
+            // Upon loading of the webpage these functions are run to ensure the
+            // list of items are loaded and the form is empty
               this.clearForm()
               this.getItems()
           },
@@ -76,6 +173,8 @@
 
             clearForm()
             {
+              // This function sets the contents of the forms input boxes
+              // to an empty string returns a console log
               console.log("Cleared Form")
               this.item.user_id = ''
               this.item.keywords= ''
@@ -86,6 +185,10 @@
             },
 
             postData(data) {
+
+              // This function returns the data that is to be posted to the console before 
+              // appending it the server-side data structure, before updating the list 
+              // using getItems() and clearing the from ready for a new input. 
 
               console.log(this.item)
 
@@ -103,6 +206,7 @@
             },
             
             getItems() {
+              // This function collects all the currently stored items data using a GET request 
               fetch(`${urlAPI}/items`, 
               {
               method: 'GET',
@@ -128,7 +232,9 @@
              .then(() => this.getItems())
              .catch(err => console.error(err));
             }
+
           },
+
         }).mount('#app')
       </script>
 
