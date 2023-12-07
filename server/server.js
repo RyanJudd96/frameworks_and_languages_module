@@ -93,7 +93,6 @@ app.post('/item', (req, res) => {
 app.get('/items', (req, res) => {
   res.json(items)
   res.status(200).json("Message: ", "Successful GET requests")
-  return;
 })
 
 app.get('/item/:id', (req, res) => {
@@ -118,10 +117,10 @@ app.get('/item/:id', (req, res) => {
 
 app.delete('/item/:id', (req, res) => {
   
-  const id = parseFloat(req.params.id);
-  const itemToDelete = items.find(itemToDelete => itemToDelete.id === id);
+  const Id = parseFloat(req.params.id);
+  const itemToDelete = items.findIndex(item => item.id === Id);
 
-  if(!itemToDelete)
+  if(itemToDelete === -1)
   {
     console.log("Error 404");
     res.status(404).json('Item Not Found');
@@ -129,7 +128,7 @@ app.delete('/item/:id', (req, res) => {
   }
   else
   {
-    const x = items.splice(id, 1);
+    items.splice(itemToDelete, 1);
     console.log("User ID found! Item Deleted");
     res.status(204).json("Item Deleted");
     return;

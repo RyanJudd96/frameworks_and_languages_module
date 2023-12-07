@@ -73,32 +73,33 @@
           </div>
           <div class="field">
             <div class="control">
-              <textarea class="textarea is-rounded is-link" v-model="item.description" placeholder="Please Enter a Description:" rows="10"></textarea>
+              <textarea class="textarea is-rounded is-link" v-model="item.description" name = "description" placeholder="Please Enter a Description:" rows="10"></textarea>
             </div>
           </div>
-          <button class = "button is-success is-outlined is-large">Post</button>
+          <button class = "button is-success is-outlined is-large" data-action="create_item">Post</button>
         </form>
         
         <!-- This a container that uses a v-for to return all the currently stored data and images 
         displayed on their own individual cards -->
-
-        <div class="container">
-          <div class="section">
-            <div class="columns">
-            </div>
-            <div id="app" class="row columns is-multiline">
-              <div v-for="item of list" key="card.id" class="column is-3">
-                <div class="card large">
-                  <div class="card-image">
-                    <figure class="image is-square">
+        
+        <ul>
+          <div class="container">
+            <div class="section">
+              <div id="app" class="row columns is-multiline">
+                <li v-for="item of list" key="card.id" class="column is-3">
+                  <div class="card large">
+                    <div class="card-image">
+                      <figure class="image is-16x9">
                       <img :src="item.image" alt="Image">
-                    </figure>
-                  </div>
+                      </figure>
+                    </div>
                   <div class="card-content">
                     <div class="media">
-                      <div class="media-left">
-                      </div>
                       <div class="media-content">
+                        <p class = "title is-4 no-padding">
+                          {{"ID: "}}
+                          <span data-field="id">{{item.id}}</span>
+                        </p>
                         <p class="title is-4 no-padding">
                           {{"User ID: "}}{{item.user_id}}
                         </p>
@@ -132,11 +133,12 @@
                     </div>
                     <button class = "button is-danger is-small is-rounded" data-action = "delete" @click="deleteItem(item.id)">Delete</button>
                   </div>
-                </div>
+                </li>
               </div>
             </div>
           </div>
-        </div>
+        </ul>
+      </div>
       </div>
 
       </div>
@@ -201,8 +203,9 @@
                 .then(response => response.json())
                 .then(json => console.log('Item Posted', json))
                 .then(() => this.getItems())
-                .catch(err => console.error(err))
-                .then(() => this.clearForm());
+                .then(() => this.clearForm())
+                .catch(err => console.error(err));
+                
             },
             
             getItems() {
@@ -223,6 +226,7 @@
 
             deleteItem(item_id)
             {
+              console.log(item_id)
               fetch(`${urlAPI}/item/${item_id}`,
               {
                 method: 'DELETE',
