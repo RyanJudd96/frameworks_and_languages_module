@@ -11,7 +11,7 @@ Please find reference to the framework documentation at this URL (https://falcon
 
 ```
 $ cd server
-$ pip install requirements.txt
+$ pip install -r requirements.txt
 ```
 
 Once the required dependencies are installed, run the server using the following terminal command.
