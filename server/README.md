@@ -14,10 +14,16 @@ $ cd server
 $ pip install requirements.txt
 ```
 
-Once the required dependencies are installed, run the server within the container using the following terminal command.
+Once the required dependencies are installed, run the server using the following terminal command.
 
 ```
-make build && make run
+$ python server.py
+```
+
+Or you can instantiate the server within a container using the Dockerfile/Makefile.
+
+```
+$ make build && make run
 ```
 ## Testing HTTP Request Methods
 
