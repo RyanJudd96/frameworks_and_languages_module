@@ -1,6 +1,6 @@
-FROM node
+FROM python
 WORKDIR /app/
-RUN npm install express --save
-RUN npm install cors
+RUN pip install falcon
+RUN pip install falcon-cors
 COPY . .
-CMD ["node", "server.js"]
+CMD ["python", "server.py"]

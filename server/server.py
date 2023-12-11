@@ -4,6 +4,13 @@ import falcon
 import datetime
 import random
 import json
+from falcon_cors import CORS
+
+cors = CORS(
+    allow_all_origins=True,
+    allow_all_headers=True,
+    allow_all_methods=True,
+)
 
 items = [
   {
@@ -30,13 +37,29 @@ items = [
   }
 ]
 
+class StaticResource:
+
+    def on_options(self, req, resp):
+            resp.status = falcon.HTTP_204
+            resp.set_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+    
+    def on_get(self, req, resp):
+        resp.content_type = 'text/html'
+        with open('website.html', 'r') as f:
+            resp.body = f.read()
+
 class getItems:
+    
+    def on_options(self, req, resp):
+        resp.set_header('Access-Control-Allow-Origin', '*') #https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers
+    
     def on_get(self, req, resp):
         """Handles GET requests"""
         resp.status = falcon.HTTP_200  # This is the default status
         resp.media = items
 
 class postItem:
+
     def on_post(self, req, resp):
         """Handles POST requests"""
         itemData = json.loads(req.bounded_stream.read().decode("utf-8"))
@@ -62,12 +85,14 @@ class postItem:
             items.append(fields)
             resp.media = fields
             resp.status = falcon.HTTP_201
+
         else:
             
             resp.media = "Missing Fields!"
             resp.status = falcon.HTTP_405
 
 class findItem:
+
     def on_get(self, req, resp, id):
         itemID = int(id)
 
@@ -81,6 +106,7 @@ class findItem:
 
     def on_delete(self, req, resp, id):
         deleteId = int(id)
+        x = None
 
         for index, i in enumerate(items):
             if i['id'] == deleteId:
@@ -94,19 +120,19 @@ class findItem:
             resp.status = falcon.HTTP_204
             resp.media = "Item Deleted!"
 
-# falcon.App instances are callable WSGI apps
-# in larger applications the app is created in a separate file
 app = falcon.App(cors_enable=True)
 
 # Resources are represented by long-lived class instances
 getItems = getItems()
 postItem = postItem()
 findItem = findItem()
+root = StaticResource()
 
-# things will handle all requests to the '/things' URL path
+# will handle all requests to the '/item' URL path
 app.add_route('/items', getItems)
 app.add_route('/item', postItem)
 app.add_route('/item/{id}', findItem)
+app.add_route('/', root)
 
 if __name__ == '__main__':
     with make_server('', 8000, app) as httpd:
