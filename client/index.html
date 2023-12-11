@@ -5,10 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FreeCycle</title>
+
+    <!-- link to bulma framework CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
 
     <script type="importmap">
       {
+        <!-- link to vue framework CDN -->
         "imports": {
           "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
         }
@@ -17,6 +20,7 @@
 
 </head>
 <body>
+  <!-- Start of navbar section -->
       <h1>FreeCycle</h1>
       <div id="app">
         <div class = "mx-6">
@@ -40,6 +44,7 @@
               </div>
             </div>
           </nav>
+      <!-- end of navbar -->
       
 
 
@@ -48,6 +53,7 @@
           <!-- All the data input boxes and submit buttons are displayed here -->
           <div class="field">
             <div class="control">
+              <!-- each input box is listed here, with Bulma styling attached -->
               <input class="input is-rounded is-link" v-model="item.user_id" name="user_id" placeholder="Please Enter your User ID:"/>
             </div>
           </div>
@@ -76,12 +82,12 @@
               <textarea class="textarea is-rounded is-link" v-model="item.description" name = "description" placeholder="Please Enter a Description:" rows="10"></textarea>
             </div>
           </div>
+          <!-- post item button is created here, with bulma styling -->
           <button class = "button is-success is-outlined is-large" data-action="create_item">Post</button>
         </form>
         
         <!-- This a container that uses a v-for to return all the currently stored data and images 
         displayed on their own individual cards -->
-        
         <ul>
           <div class="container">
             <div class="section">
@@ -150,6 +156,7 @@
         const urlParams = new URLSearchParams(window.location.search);
 	      const urlAPI = (urlParams.get('api') || '/api/v1').replace(/\/$/, '');
 
+        // this section has temp storage for item fields before being created and appended to the server
         createApp({
           data(){return {
               item: {
@@ -227,6 +234,8 @@
 
             deleteItem(item_id)
             {
+              // this function takes the id number and feeds to the server-side with 
+              // a DELETE curl cmd, before reloading the updated item list
               console.log(item_id)
               fetch(`${urlAPI}/item/${item_id}`,
               {
