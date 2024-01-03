@@ -12,6 +12,8 @@ cors = CORS(
     allow_all_methods=True,
 )
 
+# This is a dictionary filled with dummy data so the 
+# server can display items on initial start up
 items = [
   {
     "id": 0,
@@ -37,6 +39,8 @@ items = [
   }
 ]
 
+
+# Returns a basic HTML when page is opened, to confirm the server is running
 class StaticResource:
 
     def on_options(self, req, resp):
@@ -48,6 +52,7 @@ class StaticResource:
         with open('website.html', 'r') as f:
             resp.body = f.read()
 
+# This class and function returns all the elements stored within the data structure 
 class getItems:
     
     def on_options(self, req, resp):
@@ -58,6 +63,9 @@ class getItems:
         resp.status = falcon.HTTP_200  # This is the default status
         resp.media = items
 
+
+# this class and function takes the json data from the client-side server
+# and appends it to the dictionary
 class postItem:
 
     def on_post(self, req, resp):
@@ -91,6 +99,10 @@ class postItem:
             resp.media = "Missing Fields!"
             resp.status = falcon.HTTP_405
 
+
+# This class handles the two functions that utilise finding individual elements of the dictionary
+# The first function finds an element by ID and returns the data, and the second function
+# also finds an element but uses the pop() method to delete it from the array
 class findItem:
 
     def on_get(self, req, resp, id):

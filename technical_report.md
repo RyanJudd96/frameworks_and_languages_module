@@ -1,8 +1,10 @@
-Technical Report
+FreeCycle Inc - Technical Report
 ================
 
+Introduction
+---------------------
 
-
+This technical report is intended for use by both the client and any potential developers, and will cover both the current prototype and the proposed alternative web server. It will start with justification for the current solutions unsuitability for use in real world applications, followed by an overview of the features and reasoning for the choice of particular frameworks used in the design of its replacement.
 
 Critique of Server/Client prototype
 ---------------------
@@ -160,3 +162,6 @@ Conclusions
 
 (justify why frameworks are recommended - 120ish words)
 (justify which frameworks should be used and why 180ish words)
+
+References
+----------
