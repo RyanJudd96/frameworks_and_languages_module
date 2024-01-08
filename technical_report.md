@@ -14,7 +14,7 @@ This section go over some weaknesses in the design of the current prototype buil
 
 ### No CORS Middleware Support
 
-```
+```python
 RESPONSE_DEFAULTS = {
     'code': 200, 
     'body': '',
@@ -28,7 +28,7 @@ This section of code shows that the line "'Access-Control-Allow-Origin': '*'," m
 
 ### Improper handling of Multiple Packets
 
-```
+```python
 data = conn.recv(65535)  # If the request does not come though in a single recv/packet then this server will fail and will not composit multiple TCP packets. Sometimes the head and the body are sent in sequential packets. This happens when the system switches task under load.
                     #if not data: break
                     try:
@@ -61,57 +61,40 @@ The recommended approach would be to redesign the web server using industry stan
 Falcon Server Framework Features
 -------------------------
 
-### (name of Feature 1)
+### Request and Response
 
-```javascript
-let items =
-[
-  {
-    "id": 0,
-    "user_id": "user1234",
-    "keywords": [
-      "hammer",
-      "nails",
-      "tools"
-    ],
-    "description": "A hammer and nails set",
-    "image": "https://placekitten.com/200/300",
-    "lat": 51.2798438,
-    "lon": 1.0830275,
-    "date_from": "2023-10-23T13:12:39.844Z",
-    "date_to": "2023-10-23T13:12:39.844Z"
-  },
-  {
-    "id": 1,
-    "user_id": "user3000",
-    "keywords": [
-      "hammer",
-      "nails",
-      "tools"
-    ],
-    "description": "A hammer and nails set",
-    "image": "https://placekitten.com/200/300",
-    "lat": 51.2798438,
-    "lon": 1.0830275,
-    "date_from": "2023-10-23T13:12:39.844Z",
-    "date_to": "2023-10-23T13:12:39.844Z"
-  }
-]
+In the falcon framework, incoming packets are handled by objects know as req/resp. The data from the packet is represented by "req", which allows access to the request data and passes information to the methods to be processed.
+The "resp" object creates and send the HTTP response. Using "resp" you can customise the status code, headers, body etc, before passing it back as an argument to the resource methods.
+
+```python
+import falcon
+
+class Resource:
+
+    def on_get(self, req, resp):
+        resp.media = {'message': 'Hello world!'}
+        resp.status = falcon.HTTP_200
+
+# -- snip --
+
+app = falcon.App()
+app.add_route('/', Resource())
 ```
 
 
-(Technical description of the feature - 40ish words)
-(A code block snippet example demonstrating the feature)
 (Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
-(Provide reference urls to your sources of information about the feature - required)
+
+##### Documentation
+
+https://falcon.readthedocs.io/en/stable/api/request_and_response.html
 
 
-### ASGI, WSGI, and WebSocket support
+### ASGI, WSGI, and WebSocket Support:
 
 The Falcon framework has support for both WSGI and ASGI, the older and more traditional synchronous version and another that follows a newer asynchronous specification. These specifications define how a web server communicates with its application, achieving this goal in different ways. 
 
 #### WSGI
-```
+```python
 # examples/things.py
 
 # Let's get this party started!
@@ -156,7 +139,7 @@ if __name__ == '__main__':
 
 #### ASGI
 
-```
+```python
 # examples/things_asgi.py
 
 import falcon
@@ -200,11 +183,11 @@ https://falcon.readthedocs.io/en/stable/user/tutorial.html
 
 https://falcon.readthedocs.io/en/stable/user/tutorial-asgi.html
 
-### URL Routing
+### URL Routing:
 
 Falcon uses resource-based URl routing, which promotes the use of RESTful API structure to ensure standardisation. This involves each resource having a class containing all of the HTTP route methods.
 
-```
+```python
 class findItem:
 
     def on_get(self, req, resp, id):
@@ -249,7 +232,7 @@ app.add_route('/item/{id}', findItem)
 app.add_route('/', root)
 ```
 
-The use of resource-based/RESTful architecture means the design will be readable and scalable, and the requests are stateless, meaning all of the information needed for processing is contained within the request itself. Utilising a standardised approach to building a web server will result in improved maintainability and system reliability.
+The use of resource-based/RESTful architecture means the design will be readable and scalable, and the requests are stateless, meaning all of the information needed for processing is contained within the request itself, simplifying the logic on the client-side. Utilising a standardised approach to building a web server will result in improved maintainability and system reliability.
 
 ##### Falcon URL Routing:
 
@@ -259,11 +242,11 @@ https://falcon.readthedocs.io/en/stable/api/routing.html
 Server Language Features
 -----------------------
 
-### Clear and Readable Syntax
+### Clear and Readable Syntax:
 
 The python language is a dynamic, asynchronous C based language that uses variable type assumptions and very simple syntax, such as the removal of semi colons and curly braces when ending lines or declaring functions. 
 
-```
+```python
 # create a list of integers
 my_list = [1, 2, 3, 4, 5]
 
@@ -279,16 +262,16 @@ for element in iterator:
 
 This makes writing code far faster and more efficient with less human error due to missed syntax, while making the code block as a whole much more human readable. This is particularly crucial for web development projects in which team collaboration and code readability are essential.
 
-##### Python Documentation
+##### Python Documentation:
 
 https://www.python.org/doc/
 
 
-### Expansive Standard Library/Modules
+### Expansive Standard Library/Modules:
 
 The Python3 language comes pre-equipped with a large standard library of various modules for handling tasks, for example HTTP requests; web sockets; or data serialization. This extensive collection of libraries is easily available through the use of a simple import statement above your code block.
 
-```
+```python
 import shutil
 import tempfile
 import urllib.request
@@ -303,19 +286,20 @@ with open(tmp_file.name) as html:
 
 This feature greatly simplifies the development of web servers as standardised built-in functionality is available for most common tasks, and all of the libraries are thoroughly documented and available on the python website.
 
-##### Python/Module Documentation
+##### Python/Module Documentation:
 
 https://docs.python.org/3.12/
+
 https://docs.python.org/3/howto/urllib2.html
 
-Client Framework Features
+Vue Client Framework Features
 -------------------------
 
-### Declarative Rendering
+### Declarative Rendering:
 
 Vue.js framework makes use of a feature known as declarative rendering. This allows the developer to render data directly to the Document Object Model(DOM) through the us of simple syntax. The data is inserted in the DOM using a pair of nested curly braces as placeholders, and the data can be reused/rendered multiple times throughout the codebase.
 
-```
+```javascript
 <html> 
 <head> 
     <script src= 
@@ -336,45 +320,104 @@ Vue.js framework makes use of a feature known as declarative rendering. This all
 Using declarative Rendering means the developer doesn't have to write boilerplate code, allowing the framework to handle the underlying operations which results in cleaner and more efficient code.
 This is also more maintainable as developers can edit the state without needing to edit complex code, resulting in improved code maintenance and reduces chance introducing bugs during patches.
 
-##### Declarative Rendering Documentation/Tutorial
+##### Declarative Rendering Documentation/Tutorial:
+
+https://vuejs.org/guide/introduction.html
 
 https://www.geeksforgeeks.org/vue-js-declarative-rendering/
 
 
-### (name of Feature 2)
+### Reactivity:
 
-(Technical description of the feature - 40ish words)
-(A code block snippet example demonstrating the feature)
+Vanilla javascript has no in-built capability to update the result of an algorithm if one of the original variables are changed, for example:
+
+```
+A1 = 1
+A2 = 2
+
+A3 = A1 + A2 = 3
+
+A1 = 2
+```
+
+In this example A3 would still be equal to 3. Vue's reactivity feature allows for data to be retroactively changed, resulting in real-time updates.
+
+##### Example:
+```javascript
+import { ref } from 'vue'
+
+export default {
+  // `setup` is a special hook dedicated for the Composition API.
+  setup() {
+    const count = ref(0)
+
+    // expose the ref to the template
+    return {
+      count
+    }
+  }
+}
+```
+
+This makes for a very responsive web page that reacts in real-time to the users inputs, making it particularly useful for use in single page web applications.
+
+##### Documentation:
+
+https://vuejs.org/guide/introduction.html
+
+https://vuejs.org/guide/extras/reactivity-in-depth.html
+
+### Directives
+
+The Vue frameworks comes equipped with certain directives, specific markers that are used in the markup that cause the library to change some aspect of a DOM element. The most common directives include v-if, v-for, and v-bind to enable dynamic rendering of data.
+
+```javascript
+<ul>
+  <li v-for="item in items">{{ item.name }}</li>
+</ul>
+```
+
+These directives, along with others, provide a declarative way to handle various aspects of dynamic behavior in Vue.js applications. They contribute to the framework's ability to efficiently manage the DOM and keep it in sync with the application's state.
+
 (Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
-(Provide reference urls to your sources of information about the feature - required)
+
+##### Documentation:
+
+https://vuejs.org/api/built-in-directives.html#built-in-directives
 
 
-### (name of Feature 3)
-
-(Technical description of the feature - 40ish words)
-(A code block snippet example demonstrating the feature)
-(Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
-(Provide reference urls to your sources of information about the feature - required)
-
-
-Client Language Features
+Javascript Client Language Features
 ------------------------
 
-### (name of Feature 1)
+### Interpreted Language
 
-(Technical description of the feature - 40ish words)
-(A code block snippet example demonstrating the feature)
-(Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
-(Provide reference urls to your sources of information about the feature - required)
+Javascript is an interpreted language, meaning that the code is executed directly within the browser or runtime environment, without the need to compile the source code into machine code.The interpreter built into the browser or environment reads the source code line by line and executes it.
+This means that the language is more flexible in terms of platform as there is no need for platform specific compilers, however this does require the interpreter to handle type related operations dynamically.
 
-### (name of Feature 2)
+##### Documentation
 
-(Technical description of the feature - 40ish words)
-(A code block snippet example demonstrating the feature)
-(Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
-(Provide reference urls to your sources of information about the feature - required)
+https://www.tutorialspoint.com/How-is-JavaScript-an-interpreted-language
 
+### Single-threaded (with Event Loop):
 
+Because JavaScript is an interpreted language it is inherently single-threaded, but it makes use of event loops in order to deal with asynchronous operations. This allows it to efficiently process concurrent operations without needing to implement multi-threading.
+
+```javascript
+ console.log('A'); 
+      
+    setTimeout(() => { 
+        console.log('B'); 
+    }, 3000); 
+          
+    console.log('C'); 
+```
+This code in a single threaded language should print the letters in the order of A-B-C. However when the code is executed in the call stack and the first A is printed, the interpreter recognises the setTimeout() and places that operation in the call back stack. Next the interpreter moves on to execute the C operation, before checking the call back stack and completing the final operation.
+
+This means that javascript can be asynchronous, preventing long running tasks from blocking the main thread. As a result the user experience is smooth and responsive, while maintaining efficient resource utilisation. This makes javascript a good choice for building dynamic web applications.
+
+##### Documentation
+
+https://www.geeksforgeeks.org/why-javascript-is-a-single-thread-language-that-can-be-non-blocking/
 
 Conclusions
 -----------
