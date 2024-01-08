@@ -57,10 +57,8 @@ This section of code shows that if a request comes through split into multiple p
 This current implementation is unsuitable for real world applications due to the lack of middleware and use of frameworks. While the issues above could be addressed, any expansion of this prototype would result in a overly complicated and unreadable set of files, making necessary maintenance for any third party developers very inconvenient.
 
 The recommended approach would be to redesign the web server using industry standard server, client and web layout frameworks, in order to create a solution that makes use of all the provided features and support in an easy to read and expandable structure.
-(suggested direction - frameworks 40ish words)
 
-
-Server Framework Features
+Falcon Server Framework Features
 -------------------------
 
 ### (name of Feature 1)
@@ -108,51 +106,239 @@ let items =
 (Provide reference urls to your sources of information about the feature - required)
 
 
-### (name of Feature 2)
+### ASGI, WSGI, and WebSocket support
 
-(Technical description of the feature - 40ish words)
-(A code block snippet example demonstrating the feature)
-(Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
-(Provide reference urls to your sources of information about the feature - required)
+The Falcon framework has support for both WSGI and ASGI, the older and more traditional synchronous version and another that follows a newer asynchronous specification. These specifications define how a web server communicates with its application, achieving this goal in different ways. 
+
+#### WSGI
+```
+# examples/things.py
+
+# Let's get this party started!
+from wsgiref.simple_server import make_server
+
+import falcon
 
 
-### (name of Feature 3)
+# Falcon follows the REST architectural style, meaning (among
+# other things) that you think in terms of resources and state
+# transitions, which map to HTTP verbs.
+class ThingsResource:
+    def on_get(self, req, resp):
+        """Handles GET requests"""
+        resp.status = falcon.HTTP_200  # This is the default status
+        resp.content_type = falcon.MEDIA_TEXT  # Default is JSON, so override
+        resp.text = (
+            '\nTwo things awe me most, the starry sky '
+            'above me and the moral law within me.\n'
+            '\n'
+            '    ~ Immanuel Kant\n\n'
+        )
 
-(Technical description of the feature - 40ish words)
-(A code block snippet example demonstrating the feature)
-(Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
-(Provide reference urls to your sources of information about the feature - required)
+
+# falcon.App instances are callable WSGI apps
+# in larger applications the app is created in a separate file
+app = falcon.App()
+
+# Resources are represented by long-lived class instances
+things = ThingsResource()
+
+# things will handle all requests to the '/things' URL path
+app.add_route('/things', things)
+
+if __name__ == '__main__':
+    with make_server('', 8000, app) as httpd:
+        print('Serving on port 8000...')
+
+        # Serve until process is killed
+        httpd.serve_forever()
+```
+
+#### ASGI
+
+```
+# examples/things_asgi.py
+
+import falcon
+import falcon.asgi
+
+
+# Falcon follows the REST architectural style, meaning (among
+# other things) that you think in terms of resources and state
+# transitions, which map to HTTP verbs.
+class ThingsResource:
+    async def on_get(self, req, resp):
+        """Handles GET requests"""
+        resp.status = falcon.HTTP_200  # This is the default status
+        resp.content_type = falcon.MEDIA_TEXT  # Default is JSON, so override
+        resp.text = (
+            '\nTwo things awe me most, the starry sky '
+            'above me and the moral law within me.\n'
+            '\n'
+            '    ~ Immanuel Kant\n\n'
+        )
+
+
+# falcon.asgi.App instances are callable ASGI apps...
+# in larger applications the app is created in a separate file
+app = falcon.asgi.App()
+
+# Resources are represented by long-lived class instances
+things = ThingsResource()
+
+# things will handle all requests to the '/things' URL path
+app.add_route('/things', things)
+```
+
+Due to WSGI being older its the more widely supported spec, however it doesn't allow for processing multiple requests at a time or when handling lengthy connections. ASGI addresses these issues by allowing concurrent requests and long-lived connections such as web sockets, making it a better option for real time applications.
+
+##### WSGI Documentation:
+
+https://falcon.readthedocs.io/en/stable/user/tutorial.html
+
+##### ASGI Documentation:
+
+https://falcon.readthedocs.io/en/stable/user/tutorial-asgi.html
+
+### URL Routing
+
+Falcon uses resource-based URl routing, which promotes the use of RESTful API structure to ensure standardisation. This involves each resource having a class containing all of the HTTP route methods.
+
+```
+class findItem:
+
+    def on_get(self, req, resp, id):
+        itemID = int(id)
+
+        for i in items:
+            if i['id'] == itemID:
+                resp.status = falcon.HTTP_200
+                resp.media = i
+            else:
+                resp.status = falcon.HTTP_404
+                resp.media = "Item Not Found!"
+
+    def on_delete(self, req, resp, id):
+        deleteId = int(id)
+        x = None
+
+        for index, i in enumerate(items):
+            if i['id'] == deleteId:
+                x = index
+                break
+        if x == None:
+            resp.status = falcon.HTTP_404
+            resp.media = "Item Not Found!"
+        else:
+            items.pop(x)
+            resp.status = falcon.HTTP_204
+            resp.media = "Item Deleted!"
+
+app = falcon.App(cors_enable=True)
+
+# Resources are represented by long-lived class instances
+getItems = getItems()
+postItem = postItem()
+findItem = findItem()
+root = StaticResource()
+
+# will handle all requests to the '/item' URL path
+app.add_route('/items', getItems)
+app.add_route('/item', postItem)
+app.add_route('/item/{id}', findItem)
+app.add_route('/', root)
+```
+
+The use of resource-based/RESTful architecture means the design will be readable and scalable, and the requests are stateless, meaning all of the information needed for processing is contained within the request itself. Utilising a standardised approach to building a web server will result in improved maintainability and system reliability.
+
+##### Falcon URL Routing:
+
+https://falcon.readthedocs.io/en/stable/api/routing.html
 
 
 Server Language Features
 -----------------------
 
-### (name of Feature 1)
+### Clear and Readable Syntax
 
-(Technical description of the feature - 40ish words)
-(A code block snippet example demonstrating the feature)
-(Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
-(Provide reference urls to your sources of information about the feature - required)
+The python language is a dynamic, asynchronous C based language that uses variable type assumptions and very simple syntax, such as the removal of semi colons and curly braces when ending lines or declaring functions. 
+
+```
+# create a list of integers
+my_list = [1, 2, 3, 4, 5]
+
+# create an iterator from the list
+iterator = iter(my_list)
+
+# iterate through the elements of the iterator
+for element in iterator:
+
+    # Print each element
+    print(element)
+```
+
+This makes writing code far faster and more efficient with less human error due to missed syntax, while making the code block as a whole much more human readable. This is particularly crucial for web development projects in which team collaboration and code readability are essential.
+
+##### Python Documentation
+
+https://www.python.org/doc/
 
 
-### (name of Feature 2)
+### Expansive Standard Library/Modules
 
-(Technical description of the feature - 40ish words)
-(A code block snippet example demonstrating the feature)
-(Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
-(Provide reference urls to your sources of information about the feature - required)
+The Python3 language comes pre-equipped with a large standard library of various modules for handling tasks, for example HTTP requests; web sockets; or data serialization. This extensive collection of libraries is easily available through the use of a simple import statement above your code block.
 
+```
+import shutil
+import tempfile
+import urllib.request
 
+with urllib.request.urlopen('http://python.org/') as response:
+    with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
+        shutil.copyfileobj(response, tmp_file)
+
+with open(tmp_file.name) as html:
+    pass
+```
+
+This feature greatly simplifies the development of web servers as standardised built-in functionality is available for most common tasks, and all of the libraries are thoroughly documented and available on the python website.
+
+##### Python/Module Documentation
+
+https://docs.python.org/3.12/
+https://docs.python.org/3/howto/urllib2.html
 
 Client Framework Features
 -------------------------
 
-### (name of Feature 1)
+### Declarative Rendering
 
-(Technical description of the feature - 40ish words)
-(A code block snippet example demonstrating the feature)
-(Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
-(Provide reference urls to your sources of information about the feature - required)
+Vue.js framework makes use of a feature known as declarative rendering. This allows the developer to render data directly to the Document Object Model(DOM) through the us of simple syntax. The data is inserted in the DOM using a pair of nested curly braces as placeholders, and the data can be reused/rendered multiple times throughout the codebase.
+
+```
+<html> 
+<head> 
+    <script src= 
+"https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"> 
+    </script> 
+</head> 
+<body> 
+    <div id='parent'> 
+        <h3> 
+          Welcome to the exciting world of {{name}} 
+          </h3> 
+        <script src='app.js'> 
+      </script> 
+    </div> 
+</body> 
+</html>
+```
+Using declarative Rendering means the developer doesn't have to write boilerplate code, allowing the framework to handle the underlying operations which results in cleaner and more efficient code.
+This is also more maintainable as developers can edit the state without needing to edit complex code, resulting in improved code maintenance and reduces chance introducing bugs during patches.
+
+##### Declarative Rendering Documentation/Tutorial
+
+https://www.geeksforgeeks.org/vue-js-declarative-rendering/
 
 
 ### (name of Feature 2)
