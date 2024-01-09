@@ -64,7 +64,7 @@ Falcon Server Framework Features
 ### Request and Response
 
 In the falcon framework, incoming packets are handled by objects know as req/resp. The data from the packet is represented by "req", which allows access to the request data and passes information to the methods to be processed.
-The "resp" object creates and send the HTTP response. Using "resp" you can customise the status code, headers, body etc, before passing it back as an argument to the resource methods.
+The "resp" object creates and send the HTTP response. Using "resp" you can customise the status code, headers, body etc, before passing it back as an argument to the resource methods. [4]
 
 ```python
 import falcon
@@ -81,8 +81,7 @@ app = falcon.App()
 app.add_route('/', Resource())
 ```
 
-
-(Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
+This makes writing you code simpler to write and understand, as it makes it easier to extract the data out of the response object, ready to be used and manipulated within each method. It also improves readability for developers as each lines purpose can clearly be defined by the prefix resp.### or req.###.
 
 ##### Documentation
 
@@ -91,7 +90,7 @@ https://falcon.readthedocs.io/en/stable/api/request_and_response.html
 
 ### ASGI, WSGI, and WebSocket Support:
 
-The Falcon framework has support for both WSGI and ASGI, the older and more traditional synchronous version and another that follows a newer asynchronous specification. These specifications define how a web server communicates with its application, achieving this goal in different ways. 
+The Falcon framework has support for both WSGI and ASGI, the older and more traditional synchronous version and another that follows a newer asynchronous specification. These specifications define how a web server communicates with its application, achieving this goal in different ways.
 
 #### WSGI
 ```python
@@ -173,7 +172,7 @@ things = ThingsResource()
 app.add_route('/things', things)
 ```
 
-Due to WSGI being older its the more widely supported spec, however it doesn't allow for processing multiple requests at a time or when handling lengthy connections. ASGI addresses these issues by allowing concurrent requests and long-lived connections such as web sockets, making it a better option for real time applications.
+Due to WSGI being older its the more widely supported spec, however it doesn't allow for processing multiple requests at a time or when handling lengthy connections. ASGI addresses these issues by allowing concurrent requests and long-lived connections such as web sockets, making it a better option for real time applications. [6] [7]
 
 ##### WSGI Documentation:
 
@@ -232,7 +231,7 @@ app.add_route('/item/{id}', findItem)
 app.add_route('/', root)
 ```
 
-The use of resource-based/RESTful architecture means the design will be readable and scalable, and the requests are stateless, meaning all of the information needed for processing is contained within the request itself, simplifying the logic on the client-side. Utilising a standardised approach to building a web server will result in improved maintainability and system reliability.
+The use of resource-based/RESTful architecture means the design will be readable and scalable, and the requests are stateless, meaning all of the information needed for processing is contained within the request itself, simplifying the logic on the client-side. Utilising a standardised approach to building a web server will result in improved maintainability and system reliability. [5]
 
 ##### Falcon URL Routing:
 
@@ -271,6 +270,7 @@ https://www.python.org/doc/
 
 The Python3 language comes pre-equipped with a large standard library of various modules for handling tasks, for example HTTP requests; web sockets; or data serialization. This extensive collection of libraries is easily available through the use of a simple import statement above your code block.
 
+[2] 
 ```python
 import shutil
 import tempfile
@@ -317,8 +317,9 @@ Vue.js framework makes use of a feature known as declarative rendering. This all
 </body> 
 </html>
 ```
+
 Using declarative Rendering means the developer doesn't have to write boilerplate code, allowing the framework to handle the underlying operations which results in cleaner and more efficient code.
-This is also more maintainable as developers can edit the state without needing to edit complex code, resulting in improved code maintenance and reduces chance introducing bugs during patches.
+This is also more maintainable as developers can edit the state without needing to edit complex code, resulting in improved code maintenance and reduces chance introducing bugs during patches. [8] [11]
 
 ##### Declarative Rendering Documentation/Tutorial:
 
@@ -359,7 +360,7 @@ export default {
 }
 ```
 
-This makes for a very responsive web page that reacts in real-time to the users inputs, making it particularly useful for use in single page web applications.
+This makes for a very responsive web page that reacts in real-time to the users inputs, making it particularly useful for use in single page web applications.[8] [9]
 
 ##### Documentation:
 
@@ -377,9 +378,7 @@ The Vue frameworks comes equipped with certain directives, specific markers that
 </ul>
 ```
 
-These directives, along with others, provide a declarative way to handle various aspects of dynamic behavior in Vue.js applications. They contribute to the framework's ability to efficiently manage the DOM and keep it in sync with the application's state.
-
-(Explain the problem-this-is-solving/why/benefits/problems - 40ish words)
+These are only a few of the available directives, all of which offer a different way to affect the dynamic behavior of elements in the markup. These marker play a significant role in how the framework is able to manage the elements in the DOM. [10]
 
 ##### Documentation:
 
@@ -392,7 +391,7 @@ Javascript Client Language Features
 ### Interpreted Language
 
 Javascript is an interpreted language, meaning that the code is executed directly within the browser or runtime environment, without the need to compile the source code into machine code.The interpreter built into the browser or environment reads the source code line by line and executes it.
-This means that the language is more flexible in terms of platform as there is no need for platform specific compilers, however this does require the interpreter to handle type related operations dynamically.
+This means that the language is more flexible in terms of platform as there is no need for platform specific compilers, however this does require the interpreter to handle type related operations dynamically. [1]
 
 ##### Documentation
 
@@ -432,3 +431,29 @@ For the second framework, Vue.js ws selected for a variety of reasons, the first
 
 References
 ----------
+
+[1] How is JavaScript an interpreted language? (no date) Tutorialspoint. Available at: https://www.tutorialspoint.com/How-is-JavaScript-an-interpreted-language (Accessed: 09 January 2024). 
+
+[2] Howto fetch internet resources using the urllib package (no date) Python documentation. Available at: https://docs.python.org/3/howto/urllib2.html (Accessed: 09 January 2024). 
+
+[3] Python 3.12.1 documentation (no date) 3.12.1 Documentation. Available at: https://docs.python.org/3.12/ (Accessed: 09 January 2024). 
+
+[4] Request & response (no date) Request & Response - Falcon 3.1.3 documentation. Available at: https://falcon.readthedocs.io/en/stable/api/request_and_response.html (Accessed: 09 January 2024). 
+
+[5] Routing (no date) Routing - Falcon 3.1.3 documentation. Available at: https://falcon.readthedocs.io/en/stable/api/routing.html (Accessed: 09 January 2024). 
+
+[6] Tutorial (ASGI) (no date) Tutorial (ASGI) - Falcon 3.1.3 documentation. Available at: https://falcon.readthedocs.io/en/stable/user/tutorial-asgi.html (Accessed: 09 January 2024). 
+
+[7] Tutorial (WSGI) (no date) Tutorial (WSGI) - Falcon 3.1.3 documentation. Available at: https://falcon.readthedocs.io/en/stable/user/tutorial.html (Accessed: 09 January 2024). 
+
+[8] Vue.js (no date a) Introduction | Vue.js. Available at: https://vuejs.org/guide/introduction.html (Accessed: 09 January 2024). 
+
+[9] Vue.js (no date b) Reactivity in Depth | Vue.js. Available at: https://vuejs.org/guide/extras/reactivity-in-depth.html (Accessed: 09 January 2024). 
+
+[10] Vue.js (no date c) Built-in Directives | Vue.js. Available at: https://vuejs.org/api/built-in-directives.html#built-in-directives (Accessed: 09 January 2024). 
+
+[11] Vue.js declarative rendering (2021) GeeksforGeeks. Available at: https://www.geeksforgeeks.org/vue-js-declarative-rendering/ (Accessed: 09 January 2024). 
+
+[12] Welcome to Python.org (no date) Python.org. Available at: https://www.python.org/doc/ (Accessed: 09 January 2024). 
+
+[13] Why JavaScript is a single-thread language that can be non-blocking ? (2023) GeeksforGeeks. Available at: https://www.geeksforgeeks.org/why-javascript-is-a-single-thread-language-that-can-be-non-blocking/ (Accessed: 09 January 2024). 
