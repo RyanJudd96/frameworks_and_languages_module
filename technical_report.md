@@ -421,9 +421,14 @@ https://www.geeksforgeeks.org/why-javascript-is-a-single-thread-language-that-ca
 
 Conclusions
 -----------
+The use of web server frameworks is wide spread over the industry as web server frameworks have been beneficial for developers for a variety of reasons. Below are some reasons as to why choosing to adopt web server frameworks is the right choice.
 
-(justify why frameworks are recommended - 120ish words)
-(justify which frameworks should be used and why 180ish words)
+Web server frameworks come equipped with pre-built features in order to perform certain tasks, such as routing, request handling, and responses, which simplifies the development process and handling of low-level tasks far more easily. Frameworks will often use a standardised structure, resulting in cleaner and more readable codebase, which in turn makes it easier for future developers to comprehend and maintain the server. Another factor to consider would be the use of modular/reusable code, as developers can often reuse certain section of code for handling specific functions, which can greatly improve code maintenance. The use of middleware is an important concept when discussing web frameworks, as it enables developers to extend the functionality of the web server, to make it simple to add extra features like authentication, logging, and caching. These frameworks almost always have a routing solution that helps developers define how URLs direct to specific endpoints.
+
+I chose to use the Falcon framework was chosen because for its simple and readable syntax, as well as its performance as it's built to be a lightweight solution that handles requests quickly and efficiently. Its also a very lean framework, focusing on providing the essential features required to create REST APIs, resulting in an efficient and straightforward API development. The simplicity of the Falcon framework also makes it relatively easy for developers to learn and implement, which it achieves by avoiding overly complex functionality and features, the easier learning curve being is helpful for developers of all experience levels.
+In spite of its minimalist design and structure, it still remains very extensible, with support for a range of middleware capable of providing new features ready for any future expansion or development.
+
+For the second framework, Vue.js ws selected for a variety of reasons, the first 3 as stated above, being its declarative rendering feature which makes it easier for the developer to focus on developing the UI, streamlining the process by efficiently handling/updating the DOM. The reactivity feature is second, which allows for data to automatically adjust/update when underlying conditions change to provide a dynamic and responsive interface to the user. Being a javascript framework, Vue is a widely accepted framework that will operate normally in a wide variety of situations/browsers and has potential for scalability and works equally as well in large scale applications. This is also supported by its large community, contributing a large quantity of plugins, extensions and support.
 
 References
 ----------
