@@ -29,26 +29,23 @@ This section of code shows that the line "'Access-Control-Allow-Origin': '*'," m
 ### Improper handling of Multiple Packets
 
 ```python
-data = conn.recv(65535)  # If the request does not come though in a single recv/packet then this server will fail and will not composit multiple TCP packets. Sometimes the head and the body are sent in sequential packets. This happens when the system switches task under load.
-                    #if not data: break
-                    try:
-                        request = parse_request(data)
-                    except InvalidHTTPRequest as ex:
-                        log.exception("InvalidHTTPRequest")
-                        continue
+data = conn.recv(65535)  
 
-                    # HACK: If we don't have a complete message - try to botch another recv - I feel dirty doing this 
-                    # This probably wont work because utf8 decoded data will have a different content length 
-                    # This needs more testing
-                    while int(request.get('content-length', 0)) > len(request['body']):
-                        request['body'] += conn.recv(65535).decode('utf8')
+try:
+    request = parse_request(data)
+except InvalidHTTPRequest as ex:
+    log.exception("InvalidHTTPRequest")
+    continue
 
-                    try:
-                        response = func_app(request)
-                    except Exception as ex:
-                        log.error(request)
-                        traceback.print_exc()
-                        response = {'code': 500, 'body': f'<PRE>{traceback.format_exc()}</PRE>'}
+while int(request.get('content-length', 0)) > len(request['body']):
+    request['body'] += conn.recv(65535).decode('utf8')
+
+try:
+    response = func_app(request)
+except Exception as ex:
+    log.error(request)
+    traceback.print_exc()
+    response = {'code': 500, 'body': f'<PRE>{traceback.format_exc()}</PRE>'}
 ```
 This section of code shows that if a request comes through split into multiple packets, the web server will fail, and try to trace back to the origin domain to resend the data as a whole recv/packet.
 
@@ -83,7 +80,7 @@ app.add_route('/', Resource())
 
 This makes writing you code simpler to write and understand, as it makes it easier to extract the data out of the response object, ready to be used and manipulated within each method. It also improves readability for developers as each lines purpose can clearly be defined by the prefix resp.### or req.###.
 
-##### Documentation
+Documentation:
 
 https://falcon.readthedocs.io/en/stable/api/request_and_response.html
 
@@ -174,7 +171,7 @@ app.add_route('/things', things)
 
 Due to WSGI being older its the more widely supported spec, however it doesn't allow for processing multiple requests at a time or when handling lengthy connections. ASGI addresses these issues by allowing concurrent requests and long-lived connections such as web sockets, making it a better option for real time applications. [6] [7]
 
-##### WSGI Documentation:
+WSGI Documentation:
 
 https://falcon.readthedocs.io/en/stable/user/tutorial.html
 
@@ -233,7 +230,7 @@ app.add_route('/', root)
 
 The use of resource-based/RESTful architecture means the design will be readable and scalable, and the requests are stateless, meaning all of the information needed for processing is contained within the request itself, simplifying the logic on the client-side. Utilising a standardised approach to building a web server will result in improved maintainability and system reliability. [5]
 
-##### Falcon URL Routing:
+Falcon URL Routing:
 
 https://falcon.readthedocs.io/en/stable/api/routing.html
 
@@ -261,7 +258,7 @@ for element in iterator:
 
 This makes writing code far faster and more efficient with less human error due to missed syntax, while making the code block as a whole much more human readable. This is particularly crucial for web development projects in which team collaboration and code readability are essential.
 
-##### Python Documentation:
+Python Documentation:
 
 https://www.python.org/doc/
 
@@ -286,7 +283,7 @@ with open(tmp_file.name) as html:
 
 This feature greatly simplifies the development of web servers as standardised built-in functionality is available for most common tasks, and all of the libraries are thoroughly documented and available on the python website.
 
-##### Python/Module Documentation:
+Python/Module Documentation:
 
 https://docs.python.org/3.12/
 
@@ -321,7 +318,7 @@ Vue.js framework makes use of a feature known as declarative rendering. This all
 Using declarative Rendering means the developer doesn't have to write boilerplate code, allowing the framework to handle the underlying operations which results in cleaner and more efficient code.
 This is also more maintainable as developers can edit the state without needing to edit complex code, resulting in improved code maintenance and reduces chance introducing bugs during patches. [8] [11]
 
-##### Declarative Rendering Documentation/Tutorial:
+Declarative Rendering Documentation/Tutorial:
 
 https://vuejs.org/guide/introduction.html
 
@@ -362,7 +359,7 @@ export default {
 
 This makes for a very responsive web page that reacts in real-time to the users inputs, making it particularly useful for use in single page web applications.[8] [9]
 
-##### Documentation:
+Documentation:
 
 https://vuejs.org/guide/introduction.html
 
@@ -380,7 +377,7 @@ The Vue frameworks comes equipped with certain directives, specific markers that
 
 These are only a few of the available directives, all of which offer a different way to affect the dynamic behavior of elements in the markup. These marker play a significant role in how the framework is able to manage the elements in the DOM. [10]
 
-##### Documentation:
+Documentation:
 
 https://vuejs.org/api/built-in-directives.html#built-in-directives
 
@@ -393,7 +390,7 @@ Javascript Client Language Features
 Javascript is an interpreted language, meaning that the code is executed directly within the browser or runtime environment, without the need to compile the source code into machine code.The interpreter built into the browser or environment reads the source code line by line and executes it.
 This means that the language is more flexible in terms of platform as there is no need for platform specific compilers, however this does require the interpreter to handle type related operations dynamically. [1]
 
-##### Documentation
+Documentation:
 
 https://www.tutorialspoint.com/How-is-JavaScript-an-interpreted-language
 
@@ -414,7 +411,7 @@ This code in a single threaded language should print the letters in the order of
 
 This means that javascript can be asynchronous, preventing long running tasks from blocking the main thread. As a result the user experience is smooth and responsive, while maintaining efficient resource utilisation. This makes javascript a good choice for building dynamic web applications.
 
-##### Documentation
+Documentation:
 
 https://www.geeksforgeeks.org/why-javascript-is-a-single-thread-language-that-can-be-non-blocking/
 
